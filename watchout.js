@@ -16,6 +16,7 @@ var gameOptions = {
 
 var score = 0,
     bestScore = 0;
+    collisions = 0;
 
 var xAxis = d3.scale.linear().domain([0,100]).range([0,gameOptions.width]);
 var yAxis = d3.scale.linear().domain([0,100]).range([0,gameOptions.height]);
@@ -25,12 +26,17 @@ var gameBoard = d3.select(".gameboard").append("svg")
     .attr("height", gameOptions.height);
 
 var updateScore = function () {
-  d3.select('.current').text(score.soString());
+  d3.select('.current').text(score.toString());
 };
 
 var updateBestScore = function () {
   bestScore = _.max([bestScore, score]);
   d3.select('.high').text(bestScore.toString());
+};
+
+var updateCollisions = function(){
+  collisions++;
+  d3.select('.collision').text(collisions.toString());
 };
 
 var createEnemies = function(){
@@ -97,10 +103,12 @@ var checkCollision = function(enemy, collidedCallback){
 };
 
 var onCollision = function(){
-  console.log('COLLISION!');
+
+  updateCollisions();
   updateBestScore();
   score = 0;
   updateScore();
+
 };
 
 
@@ -195,26 +203,39 @@ var players = [];
 players.push(new Player(gameOptions).render(gameBoard));
 
 
+var play = function(){
 
-var gameTurn = function () {
-  newEnemyPositions = createEnemies();
-  render(newEnemyPositions);
-  d3.selectAll('.enemy')
-  .transition()
-  .duration(500)
-  .attr('r', 10)
-  .transition()
-  .duration(2000)
-  .tween('custom', tweenWithCollisionDetection);
-}
+  var gameTurn = function () {
+    newEnemyPositions = createEnemies();
+    render(newEnemyPositions);
+    d3.selectAll('.enemy')
+    .transition()
+    .duration(500)
+    .attr('r', 10)
+    .transition()
+    .duration(2000)
+    .tween('custom', tweenWithCollisionDetection);
+  };
+
+  var increaseScore = function(){
+    score ++;
+    updateScore();
+  };
+
+
+  gameTurn();
+  setInterval(function () {gameTurn();}, 2000);
+
+  setInterval(increaseScore, 50);
+
+};
+
+
+play();
 
 
 
 
-
-
-gameTurn();
-setInterval(function () {gameTurn();}, 2000);
 
 
 
