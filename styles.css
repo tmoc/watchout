@@ -1,5 +1,22 @@
 /* your beautiful css styling goes here! */
 
-/* Note: an asteroid image is included in this repo. 
+/* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
+body {
+  background-color: #000;
+}
+.scoreboard {
+  height: 100px;
+  width: 700px;
+  margin: 0 auto;
+  padding-bottom: 10px;
+  background-color: #ddd;
+}
 
+.gameboard {
+  overflow: hidden;
+  background-color: #fff;
+  width: 700px;
+  height: 450px;
+  margin: 0 auto;
+}
